@@ -6,18 +6,20 @@ from gensim.models import TfidfModel
 
 
 def get_movie_dataset(movie_path):
+
     # 读取电影数据
     # number, name, year, director, screenwriter, roles, style, countries, language, date, long, imdb, evaluation
-    print(5)
     movie_tags = pd.read_csv(movie_path, usecols=[1, 3, 4, 5, 6, 7, 8, 12]).dropna()
-    print(6)
+
     movies = movie_tags.values.tolist()
-    print(3)
+
     movie_dataset = []
-    print(0000000000)
+    movie_number = pd.read_csv(movie_path, usecols=[0])
+    movie_number = movie_number.values.tolist()
+    movie_number = [i[0] for i in movie_number]
+
     # for i in range(1200,1300):
     #     print(i+1,movies[i][0])
-    print(1)
     for movie in movies:
         temp = [movie[0]]
         for _tags in movie[1:5]:
@@ -32,10 +34,10 @@ def get_movie_dataset(movie_path):
         movie_dataset.append(temp)
     # print(movie_dataset)
     print(2)
-    return movie_dataset
+    return movie_dataset, movie_number
 
 
-def create_movie_profile(movie_dataset):
+def create_movie_profile(movie_dataset, movie_number):
     dataset = []
     for data in movie_dataset:
         dataset.append(data[1:-1])
@@ -62,7 +64,7 @@ def create_movie_profile(movie_dataset):
         # print(movie_tags_weights)
         movie_tags = [i[0] for i in movie_tags_weights.items()]
         # print(movie_tags)
-        _movie_profile.append((i + 1, name, movie_tags, movie_tags_weights))
+        _movie_profile.append((movie_number[i], name, movie_tags, movie_tags_weights))
         # print(i+1,name)
         # print(_movie_profile)
     movie_profile = pd.DataFrame(_movie_profile, columns=["number", "name", "profile", "weights"])
@@ -190,7 +192,6 @@ def filmEvaluation(movie_profile, inverted_table):
     inverted_table = create_inverted_table(movie_profile)
     user_profile, movieIds = create_user_profile(training_path, movie_profile)
     user_recommend = user_recommend_top_N(user_profile, movieIds, inverted_table)
-    print(user_recommend[1])
     name = []
     for item in user_recommend[1]:
         name.append(item[0])
@@ -201,24 +202,20 @@ def filmEvaluation(movie_profile, inverted_table):
 
 
 def recommend(movies):
-    movie_path = '../data/movie_info.csv'
+    movie_path = 'D:\Code\Python\MovieRecommend\data\movie_info.csv'
 
     # 获取数据，处理数据集
 
-    movie_dataset = get_movie_dataset(movie_path)
+    movie_dataset, movie_number = get_movie_dataset(movie_path)
     # 对电影构建画像
 
-    movie_profile = create_movie_profile(movie_dataset)
+    movie_profile = create_movie_profile(movie_dataset, movie_number)
     # 创建倒排表
-    print(33333333)
     inverted_table = create_inverted_table(movie_profile)
     # 构建用户画像
-    print(4444444444)
     user_profile, movieIds = create_user_profile(movies, movie_profile)
     # 对用户推荐电影
-    print(555555)
     user_recommend = user_recommend_top_N(user_profile, movieIds, inverted_table)
-    print(6666666666)
     return user_recommend
     # movie = user_recommend[1]
     # print(movie)

@@ -14,10 +14,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.urls import path,include
-from MRApp.views import RegisterView, LoginView, Complete
+from MRApp import views
+# from dj_test import views
 
 urlpatterns = [
-    path('login', LoginView.as_view()),
-    path('register', RegisterView.as_view()),
-    path('complete', Complete.as_view())
+    path('login', views.Login),
+    path('capture', views.get_images),
+    path('register', views.RegisterView),
+    path('complete', views.complete),
+    path('face', views.set_face),
+
+    path('all_movie', views.get_all_movie),
+    path('movie_info', views.get_movie_info),
+    path('get_record', views.get_record),
+    # path('surf_movie', views.surf_movie),
 ]

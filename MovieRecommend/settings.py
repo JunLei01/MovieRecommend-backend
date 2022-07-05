@@ -27,7 +27,7 @@ SECRET_KEY = 'ye!w)aww-52_+-#7iel9ehd5$(g0_s7qs0m851)8y^3-$2$894'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 ROOT_URLCONF = 'MovieRecommend.urls'
@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
-    'MRApp'
+    'MRApp',
 ]
 
 MIDDLEWARE = [
